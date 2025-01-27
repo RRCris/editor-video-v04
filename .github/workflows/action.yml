@@ -9,5 +9,7 @@ jobs:
   hello_world:
     runs-on: ubuntu-18.04
     steps:
-      - name: "hello"
+      - name: hello
         run: echo "Hola mundo"
+      - name: fecha
+        run: date
