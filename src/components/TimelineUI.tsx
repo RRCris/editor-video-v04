@@ -13,7 +13,6 @@ export default function TimelineUI({ TL }: { TL: Timeline }) {
     return () => subs.forEach((sub) => sub.unsubscribe());
   }, []);
 
-  console.log(TL.SRC_S);
   return (
     <div style={{ background: "#FFD1B0", height: 64 }}>
       {TL.SRC_S.map((SRC) => (
