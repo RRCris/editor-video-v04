@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-private-class-members */
 import { Capturer } from "./Capturer";
 import Clock from "./Clock";
 import EventEmitter from "./EventEmitter";
@@ -9,8 +10,8 @@ type Tevents_Control = (typeof events_Control)[number];
 
 export class Control {
   type = "CONTROL";
-  #elementCanvas = document.createElement("canvas");
-  #ctx_bitmap = this.#elementCanvas.getContext("bitmaprenderer");
+  // #elementCanvas = document.createElement("canvas");
+  // #ctx_bitmap = this.#elementCanvas.getContext("bitmaprenderer");
   TL_S: Timeline[] = [];
   CL: Clock = new Clock();
   CAP: Capturer = new Capturer();

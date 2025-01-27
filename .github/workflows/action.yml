@@ -7,7 +7,7 @@ on:
 
 jobs:
   deploy:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     steps:
       - uses: actions/checkout@v4.2.2
         with: 
@@ -16,7 +16,7 @@ jobs:
         with:
           node-version: "14" 
       - name: Instalar Dependencias
-        run: npm install --no-audit --no-fund --no-optional
+        run: npm ci
       - name : Build Proyect
         run: npm build
           

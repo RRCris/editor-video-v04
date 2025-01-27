@@ -44,11 +44,11 @@ export class SourceAudio implements SourceBase {
   }
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  #fire(event: Tevents_Source, value: any) {
-    if (events_Source.includes(event)) {
-      this.#EVT.fire(event, value);
-    } else {
-      throw new Error(`El evento de ${event} o esta en la lista de eventos del tpi ${this.type}`);
-    }
-  }
+  // #fire(event: Tevents_Source, value: any) {
+  //   if (events_Source.includes(event)) {
+  //     this.#EVT.fire(event, value);
+  //   } else {
+  //     throw new Error(`El evento de ${event} o esta en la lista de eventos del tpi ${this.type}`);
+  //   }
+  // }
 }
