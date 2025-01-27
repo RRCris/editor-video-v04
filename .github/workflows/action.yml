@@ -16,5 +16,7 @@ jobs:
         with:
           node-version: "14" 
       - name: Instalar Dependencias
-        run: npm install
+        run: npm install --no-audit --no-fund --no-optional
+      - name : Build Proyect
+        run: npm build
           
