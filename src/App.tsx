@@ -25,7 +25,7 @@ function App() {
     pause: button(() => CTRL.pause()),
     reset: button(() => CTRL.reset()),
     loadFile: button(() => CTRL.CAP.captureFiles()),
-    addTimeline: button(() => CTRL.addTimeline(new Timeline())),
+    addTimeline: button(() => CTRL.addTimeline(new Timeline(CTRL))),
     loadLinkAudio: button(() =>
       CTRL.CAP.captureLink(
         "https://v1.cdnpk.net/videvo_files/audio/premium/audio0137/conversions/mp3_option/mi_explosion_03_hpx.mp3?token=exp=1737742039~hmac=66b195fe54866697a171442289a984e12b226acc2aa41200252836e3d4e15c8a&filename=251585_meme_five_different_miexplosion03hpx.mp3"

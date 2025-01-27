@@ -27,7 +27,7 @@ export class Information {
   addSource(TL: Timeline, medias: T_INF[]) {
     for (const media of medias) {
       if (media === "audio") {
-        const source = new SourceAudio(this);
+        const source = new SourceAudio(this, TL);
         TL.addSource(source);
       }
     }

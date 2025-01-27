@@ -1,3 +1,4 @@
+import { Control } from "./Control";
 import EventEmitter from "./EventEmitter";
 import { SourceBase } from "./Sources/SourceBase";
 
@@ -7,8 +8,14 @@ type Tevents_Timeline = (typeof events_Timeline)[number];
 export class Timeline {
   type = "TIMELINE";
   id: string = crypto.randomUUID();
+
   SRC_S: SourceBase[] = [];
-  #EVT: EventEmitter = new EventEmitter();
+  EVT: EventEmitter = new EventEmitter();
+  CTRL: Control;
+
+  constructor(CTRL: Control) {
+    this.CTRL = CTRL;
+  }
 
   addSource(SRC: SourceBase) {
     this.SRC_S.push(SRC);
@@ -18,7 +25,7 @@ export class Timeline {
   on<T>(event: Tevents_Timeline, callback: (data: T) => void) {
     //Acepta solo eventos registrados
     if (events_Timeline.includes(event)) {
-      return this.#EVT.on(event, callback);
+      return this.EVT.on(event, callback);
     } else {
       throw new Error(`El evento de ${event} o esta en la lista de eventos del tipo ${this.type}`);
     }
@@ -27,7 +34,7 @@ export class Timeline {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   #fire(event: Tevents_Timeline, value: any) {
     if (events_Timeline.includes(event)) {
-      this.#EVT.fire(event, value);
+      this.EVT.fire(event, value);
     } else {
       throw new Error(`El evento de ${event} o esta en la lista de eventos del tpi ${this.type}`);
     }
