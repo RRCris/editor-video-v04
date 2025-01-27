@@ -6,10 +6,15 @@ on:
       - main
 
 jobs:
-  hello_world:
+  deploy:
     runs-on: ubuntu-latest
     steps:
-      - name: hello
-        run: echo "Hola mundo"
-      - name: fecha
-        run: date
+      - uses: actions/checkout@v4.2.2
+        with: 
+          fetch-depth: 0
+      - uses: actions/setup-node@v4.2.0
+        with:
+          node-version: "14" 
+      - name: Instalar Dependencias
+        run: npm install
+          
