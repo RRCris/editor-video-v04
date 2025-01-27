@@ -1,4 +1,4 @@
-name: CI/CD
+name: Pipeline
 
 on:
   push:
@@ -7,7 +7,7 @@ on:
 
 jobs:
   hello_world:
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-latest
     steps:
       - name: hello
         run: echo "Hola mundo"
