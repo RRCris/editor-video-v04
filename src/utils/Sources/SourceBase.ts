@@ -5,7 +5,7 @@ import { Timeline } from "../Timeline";
 
 export type T_SRC_STATE = "STOP" | "PLAYING" | "PREPARING";
 
-export const events_Source = [""] as const;
+export const events_Source = ["STATE"] as const;
 export type Tevents_Source = (typeof events_Source)[number];
 export interface SourceBase {
   //identificacion
@@ -21,6 +21,7 @@ export interface SourceBase {
   //variable data
   state: T_SRC_STATE;
   play: (ctx: AudioContext, milisecods: number) => void;
+  pause: () => void;
   on: <T>(event: Tevents_Source, callback: (data: T) => void) => Subscription;
   sync: (milisecods: number) => Promise<void>;
 }

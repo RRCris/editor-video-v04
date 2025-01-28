@@ -16,6 +16,7 @@ function App() {
 
     subs.push(CTRL.on("INF_S", () => setINF_S({ ...CTRL.INF_S })));
     subs.push(CTRL.on("TL_S", () => setTL_S({ ...CTRL.TL_S })));
+    subs.push(CTRL.on("PLAYING", (time) => console.log(time)));
     subs.push(CTRL.CAP.on("CAPTURE_ERROR", () => alert("hubo un error al intentar cargar el recurso")));
 
     return () => subs.forEach((sub) => sub.unsubscribe());
@@ -38,7 +39,7 @@ function App() {
     ),
   });
   const controls = useControls({
-    library: false,
+    library: true,
   });
 
   return (

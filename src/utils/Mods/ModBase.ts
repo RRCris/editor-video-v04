@@ -5,6 +5,7 @@ import { SourceBase } from "../Sources/SourceBase";
 export interface ModBase {
   id: string;
   type: "MOD";
+  subType: "TIME";
   EVT: EventEmitter;
   SRC: SourceBase;
   play: (miliseconds: number) => void;
