@@ -45,6 +45,7 @@ export class SourceAudio implements SourceBase {
     });
   }
   sync(miliseconds: number) {
+    console.log(miliseconds);
     return Promise.resolve();
   }
 
