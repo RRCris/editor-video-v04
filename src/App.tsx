@@ -1,26 +1,23 @@
-import { useEffect, useMemo, useState } from "react";
+import { useMemo } from "react";
 import { Control } from "./utils/Control";
 import { button, useControls } from "leva";
-import { Subscription } from "rxjs";
 import CardINF from "./components/CardINF";
 import { Timeline } from "./utils/Timeline";
 import TimelineUI from "./components/TimelineUI";
+import { useObserver, useObserver2 } from "./hooks/useObserver";
 
 function App() {
   const CTRL = useMemo(() => new Control(), []);
-  const [, setINF_S] = useState(CTRL.INF_S);
-  const [, setTL_S] = useState(CTRL.TL_S);
 
-  useEffect(() => {
-    const subs: Subscription[] = [];
+  // const INF_S = useObserver2(CTRL.INF_S, (cb) => CTRL.on("INF_S", () => cb([...CTRL.INF_S])));
+  const INF_S = useObserver(CTRL.INF_S, CTRL, "INF_S", (v) => [...v]);
+  // const TL_S = useObserver2(CTRL.TL_S, (cb) => CTRL.on("TL_S", () => cb([...CTRL.TL_S])));
+  const TL_S = useObserver(CTRL.TL_S, CTRL, "TL_S", (v) => [...v]);
+  useObserver2(0, () => CTRL.on("PLAYING", (time: number) => console.log(time)));
+  useObserver2(0, () =>
+    CTRL.CAP.on("CAPTURE_ERROR", () => alert("hubo un error al intentar cargar el recurso"))
+  );
 
-    subs.push(CTRL.on("INF_S", () => setINF_S({ ...CTRL.INF_S })));
-    subs.push(CTRL.on("TL_S", () => setTL_S({ ...CTRL.TL_S })));
-    subs.push(CTRL.on("PLAYING", (time) => console.log(time)));
-    subs.push(CTRL.CAP.on("CAPTURE_ERROR", () => alert("hubo un error al intentar cargar el recurso")));
-
-    return () => subs.forEach((sub) => sub.unsubscribe());
-  }, []);
   useControls("CTRL", {
     play: button(() => CTRL.play()),
     pause: button(() => CTRL.pause()),
@@ -37,6 +34,7 @@ function App() {
         "https://videocdn.cdnpk.net/joy/content/video/free/2014-12/originalContent/Raindrops_Videvo.mp4?token=exp=1737742457~hmac=92bea9d7d3b21d2c4df8251e9d3bd4e46ef5ac8b74cc010146010159d78c4c81&filename=3313_rain_raining_rain_drops_RaindropsVidevo.mp4"
       )
     ),
+    addZoom: button(() => (CTRL.timeScale += 10)),
   });
   const controls = useControls({
     library: true,
@@ -47,10 +45,10 @@ function App() {
       <h1>editor video v4</h1>
       <div style={{ display: "flex", maxWidth: 600, flexWrap: "wrap", gap: 20 }}>
         {controls.library &&
-          Object.values(CTRL.INF_S).map((INF) => <CardINF key={INF.id} INF={INF} CTRL={CTRL} />)}
+          Object.values(INF_S).map((INF) => <CardINF key={INF.id} INF={INF} CTRL={CTRL} />)}
       </div>
       <div>
-        {CTRL.TL_S.map((TL) => (
+        {TL_S.map((TL) => (
           <TimelineUI TL={TL} key={TL.id} />
         ))}
       </div>

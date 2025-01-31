@@ -5,7 +5,7 @@ import EventEmitter from "./EventEmitter";
 import { Information } from "./Information";
 import { Timeline } from "./Timeline";
 
-const events_Control = ["INF_S", "TL_S", "STATE", "PLAYING"] as const;
+const events_Control = ["INF_S", "TL_S", "STATE", "PLAYING", "TIME_SCALE"] as const;
 type Tevents_Control = (typeof events_Control)[number];
 
 export class Control {
@@ -26,6 +26,7 @@ export class Control {
   #idInterval: null | number = null;
   #temporalContextAudio: null | AudioContext = null;
   #state: "STOP" | "PLAYING" = "STOP";
+  #timeScale = 50;
 
   //fire & change
   set state(newState: "STOP" | "PLAYING") {
@@ -34,6 +35,15 @@ export class Control {
   }
   get state() {
     return this.#state;
+  }
+
+  //fire & change
+  set timeScale(newValue: number) {
+    this.#timeScale = newValue;
+    this.#fire("TIME_SCALE", this.timeScale);
+  }
+  get timeScale() {
+    return this.#timeScale;
   }
 
   constructor() {

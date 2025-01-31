@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { Timeline } from "../utils/Timeline";
 import { Subscription } from "rxjs";
 import SourceUI from "./SourceUI";
-
+import css from "../styles/components/TimelineUI.module.css";
 export default function TimelineUI({ TL }: { TL: Timeline }) {
   const [, setSRC_S] = useState(TL.SRC_S);
 
@@ -14,7 +14,7 @@ export default function TimelineUI({ TL }: { TL: Timeline }) {
   }, []);
 
   return (
-    <div style={{ background: "#FFD1B0", height: 64 }}>
+    <div className={css.container}>
       {TL.SRC_S.map((SRC) => (
         <SourceUI SRC={SRC} key={SRC.id} />
       ))}

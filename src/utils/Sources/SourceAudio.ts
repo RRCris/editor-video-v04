@@ -1,5 +1,6 @@
 import EventEmitter from "../EventEmitter";
 import { Information } from "../Information";
+import { ModBase, Tmods } from "../Mods/ModBase";
 import { ModTime } from "../Mods/ModTime";
 import { Timeline } from "../Timeline";
 import { events_Source, SourceBase, T_SRC_STATE, Tevents_Source } from "./SourceBase";
@@ -14,6 +15,7 @@ export class SourceAudio implements SourceBase {
   MOD_TIME: ModTime = new ModTime(this);
   EVT = new EventEmitter();
   TL: Timeline;
+  MOD_S: ModBase[] = [];
 
   //data only readble
   #audiobuffer: null | AudioBuffer = null;
@@ -80,5 +82,13 @@ export class SourceAudio implements SourceBase {
     } else {
       throw new Error(`El evento de ${event} o esta en la lista de eventos del tpi ${this.type}`);
     }
+  }
+
+  getMod(subType: Tmods): ModBase {
+    if (subType === this.MOD_TIME.subType) return this.MOD_TIME;
+    for (const mod of this.MOD_S) {
+      if (mod.subType === subType) return mod;
+    }
+    throw new Error(`El subType ${subType} no se encontro en el recurso de tipo ${this.type}`);
   }
 }

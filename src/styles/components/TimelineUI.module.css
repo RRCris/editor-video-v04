@@ -1,0 +1,6 @@
+.container {
+  background: #ffd1b0;
+  height: 64px;
+  position: relative;
+  border: 4px solid grey;
+}
