@@ -12,7 +12,7 @@ export default function CardINF({ INF, CTRL }: { INF: Information; CTRL: Control
       <p>{INF.name}</p>
 
       {INF.getMedia().map((media, i) => (
-        <button key={i} onClick={() => INF.addSource(CTRL.TL_S[0], [media])}>{`add ${media}`}</button>
+        <button key={i} onClick={() => INF.addSource(CTRL.TL_S[0], 2000, [media])}>{`add ${media}`}</button>
       ))}
     </div>
   );

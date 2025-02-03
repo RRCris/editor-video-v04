@@ -39,7 +39,7 @@ export class SourceAudio implements SourceBase {
     this.TL = TL;
     this.subType = INF.subType;
     this.name = INF.name;
-    new AudioContext().decodeAudioData(INF.infoRaw).then((audiobuffer) => {
+    new AudioContext().decodeAudioData(INF.infoRaw.slice(0)).then((audiobuffer) => {
       this.#audiobuffer = audiobuffer;
       this.bufferDuration = audiobuffer.duration * 1000;
       this.MOD_TIME.originalDuration = audiobuffer.duration * 1000;

@@ -9,9 +9,7 @@ import { useObserver, useObserver2 } from "./hooks/useObserver";
 function App() {
   const CTRL = useMemo(() => new Control(), []);
 
-  // const INF_S = useObserver2(CTRL.INF_S, (cb) => CTRL.on("INF_S", () => cb([...CTRL.INF_S])));
   const INF_S = useObserver(CTRL.INF_S, CTRL, "INF_S", (v) => [...v]);
-  // const TL_S = useObserver2(CTRL.TL_S, (cb) => CTRL.on("TL_S", () => cb([...CTRL.TL_S])));
   const TL_S = useObserver(CTRL.TL_S, CTRL, "TL_S", (v) => [...v]);
   useObserver2(0, () => CTRL.on("PLAYING", (time: number) => console.log(time)));
   useObserver2(0, () =>
@@ -35,6 +33,7 @@ function App() {
       )
     ),
     addZoom: button(() => (CTRL.timeScale += 10)),
+    preview: button(() => console.log(CTRL.TL_S[0].previewAddSource(2000, 6000))),
   });
   const controls = useControls({
     library: true,

@@ -24,11 +24,11 @@ export class Information {
     this.subType = information.subType;
   }
 
-  addSource(TL: Timeline, medias: T_INF[]) {
+  addSource(TL: Timeline, select: number, medias: T_INF[]) {
     for (const media of medias) {
       if (media === "audio") {
         const source = new SourceAudio(this, TL);
-        TL.addSource(source);
+        TL.addSource(source, select);
       }
     }
   }

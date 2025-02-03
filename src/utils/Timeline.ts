@@ -5,6 +5,12 @@ import { SourceBase } from "./Sources/SourceBase";
 const events_Timeline = ["SRC_S"] as const;
 type Tevents_Timeline = (typeof events_Timeline)[number];
 
+interface Tsrc {
+  start: number;
+  end: number;
+  src: SourceBase;
+}
+
 export class Timeline {
   type = "TIMELINE";
   id: string = crypto.randomUUID();
@@ -17,7 +23,12 @@ export class Timeline {
     this.CTRL = CTRL;
   }
 
-  addSource(SRC: SourceBase) {
+  addSource(SRC: SourceBase, select: number) {
+    const sub = SRC.on("STATE", () => {
+      sub.unsubscribe();
+      const free = this.getFreeSpace(select, SRC.MOD_TIME.duration, SRC.id);
+      SRC.MOD_TIME.setP("DELAY", free.start);
+    });
     this.SRC_S.push(SRC);
     this.#fire("SRC_S", this.SRC_S);
   }
@@ -38,5 +49,46 @@ export class Timeline {
     } else {
       throw new Error(`El evento de ${event} o esta en la lista de eventos del tpi ${this.type}`);
     }
+  }
+
+  previewAddSource(start: number, end: number, exeption?: string) {
+    const suggestion = this.getFreeSpace(start, end, exeption);
+    return {
+      valid: start === suggestion.start && end === suggestion.end,
+      ...suggestion,
+    };
+  }
+
+  getAllSpace(): Tsrc[] {
+    const res = this.SRC_S.map((SRC) => ({
+      start: SRC.MOD_TIME.delay,
+      end: SRC.MOD_TIME.delay + SRC.MOD_TIME.duration,
+      src: SRC,
+    }));
+
+    return res;
+  }
+
+  getFreeSpace(start: number, end: number, exeption?: string): { start: number; end: number } {
+    if (start < 0) {
+      end += Math.abs(start);
+      start = 0;
+    }
+    const collisions = this.getColisions(start, end, exeption || "xxx");
+    if (collisions.length === 0) return { start, end };
+    return this.getFreeSpace(start + 300, end + 300, exeption);
+  }
+
+  getColisions(start: number, end: number, exeption: string): Tsrc[] {
+    const src_s = this.getAllSpace();
+    const collitions: Tsrc[] = [];
+    for (const src of src_s) {
+      if (src.src.id === exeption) continue;
+      if (end > src.start && src.end > start) {
+        collitions.push(src);
+      }
+    }
+
+    return collitions;
   }
 }

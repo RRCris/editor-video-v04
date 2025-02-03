@@ -93,6 +93,12 @@ export class ModTime implements ModBase {
           return { value: this.#delay, message: `${newValue} <- esto no es numero`, valid: false };
         if (newValue < 0)
           return { value: this.#delay, message: `${newValue} <- tiene que ser mayor a 0`, valid: false };
+        if (!this.SRC.TL.previewAddSource(newValue, newValue + this.duration, this.SRC.id).valid)
+          return {
+            value: this.#delay,
+            message: `${newValue} <- choca con los recursos de la linea de tiempo actual`,
+            valid: false,
+          };
 
         //change
         this.#delay = newValue;
@@ -107,7 +113,7 @@ export class ModTime implements ModBase {
           valid: true,
         };
 
-      case "CROP_START":
+      case "CROP_START": {
         //valid
         if (typeof newValue !== "number")
           return { value: this.#cropStart, message: `${newValue} <- esto no es numero`, valid: false };
@@ -117,6 +123,13 @@ export class ModTime implements ModBase {
           return {
             value: this.#cropStart,
             message: `${newValue} <- esta en colision con otro corte`,
+            valid: false,
+          };
+        const dur = this.originalDuration - newValue - this.cropEnd;
+        if (!this.SRC.TL.previewAddSource(this.delay, this.delay + dur, this.SRC.id).valid)
+          return {
+            value: this.#delay,
+            message: `${newValue} <- choca con los recursos de la linea de tiempo actual`,
             valid: false,
           };
 
@@ -132,7 +145,8 @@ export class ModTime implements ModBase {
           message: "all good",
           valid: true,
         };
-      case "CROP_END":
+      }
+      case "CROP_END": {
         //valid
         if (typeof newValue !== "number")
           return { value: this.#cropEnd, message: `${newValue} <- esto no es numero`, valid: false };
@@ -142,6 +156,13 @@ export class ModTime implements ModBase {
           return {
             value: this.#cropEnd,
             message: `${newValue} <- esta en colision con otro corte`,
+            valid: false,
+          };
+        const dur = this.originalDuration - this.cropStart - newValue;
+        if (!this.SRC.TL.previewAddSource(this.delay, this.delay + dur, this.SRC.id).valid)
+          return {
+            value: this.#delay,
+            message: `${newValue} <- choca con los recursos de la linea de tiempo actual`,
             valid: false,
           };
 
@@ -157,6 +178,7 @@ export class ModTime implements ModBase {
           message: "all good",
           valid: true,
         };
+      }
     }
   }
 }
