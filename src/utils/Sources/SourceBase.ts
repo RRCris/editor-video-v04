@@ -9,6 +9,10 @@ export type T_SRC_STATE = "STOP" | "PLAYING" | "PREPARING";
 export const events_Source = ["STATE"] as const;
 export type Tevents_Source = (typeof events_Source)[number];
 
+export interface Tplay_source {
+  color: string;
+}
+
 export interface SourceBase {
   //identificacion
   id: string;
@@ -22,7 +26,7 @@ export interface SourceBase {
   TL: Timeline;
   //variable data
   state: T_SRC_STATE;
-  play: (ctx: AudioContext, milisecods: number) => void;
+  play: (ctx: AudioContext, milisecods: number) => Tplay_source | null;
   pause: () => void;
   on: <T>(event: Tevents_Source, callback: (data: T) => void) => Subscription;
   sync: (milisecods: number) => Promise<void>;

@@ -61,6 +61,7 @@ export class SourceAudio implements SourceBase {
 
       node.connect(ctx.destination);
     }
+    return null;
   }
   pause() {
     this.state = "STOP";

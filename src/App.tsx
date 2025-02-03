@@ -1,4 +1,4 @@
-import { useMemo } from "react";
+import { useEffect, useMemo, useRef } from "react";
 import { Control } from "./utils/Control";
 import { button, useControls } from "leva";
 import CardINF from "./components/CardINF";
@@ -8,6 +8,15 @@ import { useObserver, useObserver2 } from "./hooks/useObserver";
 
 function App() {
   const CTRL = useMemo(() => new Control(), []);
+  const refContainer = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    if (refContainer.current) {
+      CTRL.couple(refContainer.current);
+    }
+    return () => {
+      if (refContainer.current) refContainer.current.innerHTML = "";
+    };
+  }, []);
 
   const INF_S = useObserver(CTRL.INF_S, CTRL, "INF_S", (v) => [...v]);
   const TL_S = useObserver(CTRL.TL_S, CTRL, "TL_S", (v) => [...v]);
@@ -42,6 +51,7 @@ function App() {
   return (
     <div>
       <h1>editor video v4</h1>
+      <div ref={refContainer} />
       <div style={{ display: "flex", maxWidth: 600, flexWrap: "wrap", gap: 20 }}>
         {controls.library &&
           Object.values(INF_S).map((INF) => <CardINF key={INF.id} INF={INF} CTRL={CTRL} />)}
