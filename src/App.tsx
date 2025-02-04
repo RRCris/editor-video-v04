@@ -2,7 +2,6 @@ import { useEffect, useMemo, useRef } from "react";
 import { Control } from "./utils/Control";
 import { button, useControls } from "leva";
 import CardINF from "./components/CardINF";
-import { Timeline } from "./utils/Timeline";
 import TimelineUI from "./components/TimelineUI";
 import { useObserver, useObserver2 } from "./hooks/useObserver";
 
@@ -30,19 +29,45 @@ function App() {
     pause: button(() => CTRL.pause()),
     reset: button(() => CTRL.reset()),
     loadFile: button(() => CTRL.CAP.captureFiles()),
-    addTimeline: button(() => CTRL.addTimeline(new Timeline(CTRL))),
-    loadLinkAudio: button(() =>
-      CTRL.CAP.captureLink(
-        "https://v1.cdnpk.net/videvo_files/audio/premium/audio0137/conversions/mp3_option/mi_explosion_03_hpx.mp3?token=exp=1737742039~hmac=66b195fe54866697a171442289a984e12b226acc2aa41200252836e3d4e15c8a&filename=251585_meme_five_different_miexplosion03hpx.mp3"
-      )
-    ),
-    loadLinkVideo: button(() =>
-      CTRL.CAP.captureLink(
-        "https://videocdn.cdnpk.net/joy/content/video/free/2014-12/originalContent/Raindrops_Videvo.mp4?token=exp=1737742457~hmac=92bea9d7d3b21d2c4df8251e9d3bd4e46ef5ac8b74cc010146010159d78c4c81&filename=3313_rain_raining_rain_drops_RaindropsVidevo.mp4"
-      )
-    ),
-    addZoom: button(() => (CTRL.timeScale += 10)),
+    // addTimeline: button(() => CTRL.addTimeline(new Timeline(CTRL))),
     preview: button(() => console.log(CTRL.TL_S[0].previewAddSource(2000, 6000))),
+    focus: button(() => CTRL.focusScene()),
+    addZoom: {
+      value: CTRL.timeScale,
+      min: 0,
+      max: 200,
+      onChange: (value: number) => (CTRL.timeScale = value),
+    },
+    background: {
+      value: CTRL.backgroundView,
+      onChange: (clr: string) => (CTRL.backgroundView = clr),
+    },
+    zoom: {
+      value: CTRL.zoomView,
+      min: 10,
+      max: 200,
+      onChange: (value: number) => (CTRL.zoomView = value),
+    },
+    offsets: {
+      value: { x: CTRL.offsetXView, y: CTRL.offsetYView },
+      step: 5,
+      onChange: ({ x, y }: { x: number; y: number }) => {
+        CTRL.offsetXView = x;
+        CTRL.offsetYView = y;
+      },
+    },
+    backgroundScene: {
+      value: CTRL.backgroundScene,
+      onChange: (clr: string) => (CTRL.backgroundScene = clr),
+    },
+    widthScene: {
+      value: CTRL.widthScene,
+      onChange: (clr: number) => (CTRL.widthScene = clr),
+    },
+    heightScene: {
+      value: CTRL.heightScene,
+      onChange: (clr: number) => (CTRL.heightScene = clr),
+    },
   });
   const controls = useControls({
     library: true,
@@ -51,7 +76,7 @@ function App() {
   return (
     <div>
       <h1>editor video v4</h1>
-      <div ref={refContainer} />
+      <div ref={refContainer} style={{ width: 500, height: 300 }} />
       <div style={{ display: "flex", maxWidth: 600, flexWrap: "wrap", gap: 20 }}>
         {controls.library &&
           Object.values(INF_S).map((INF) => <CardINF key={INF.id} INF={INF} CTRL={CTRL} />)}

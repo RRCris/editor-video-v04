@@ -1,15 +1,22 @@
+import { Control, Tdraw_Control } from "../utils/Control";
 import { Tplay_source } from "../utils/Sources/SourceBase";
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
-console.log("LOAD WORKER DRAWING");
+
+export interface Tdraw_Worker {
+  control: Tdraw_Control;
+  sources: Tplay_source[];
+}
 
 const actions = {
-  DRAW: (data: Tplay_source[]) => {
-    const canvas = new OffscreenCanvas(300, 300);
+  DRAW: ({ control }: Tdraw_Worker) => {
+    const canvas = new OffscreenCanvas(control.view.width, control.view.height);
     const ctx = canvas.getContext("2d");
-    ctx?.fillRect(10, 10, 100, 100);
-    console.log(data);
+    if (!ctx) return;
+    //Drawing
+    Control.drawInWorker(ctx, control);
 
+    //Export
     const bitmap = canvas.transferToImageBitmap();
     fire("PRINT", bitmap, [bitmap]);
   },
